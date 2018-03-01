@@ -73,5 +73,6 @@ $(document).ready(function () {
   }
   function dumpConfigBtnClick(event) {
     event.preventDefault()
+    console.log(activeCells);
   }
 })
