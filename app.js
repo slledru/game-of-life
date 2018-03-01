@@ -67,7 +67,9 @@ $(document).ready(function () {
     event.preventDefault()
   }
   function clearBtnClick(event) {
-    event.preventDefault()
+    event.preventDefault
+    $('td').removeClass('on')
+    activeCells = {}
   }
   function dumpConfigBtnClick(event) {
     event.preventDefault()
