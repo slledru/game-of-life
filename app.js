@@ -44,8 +44,6 @@ $(document).ready(function () {
     } else {
       delete activeCells[rowColString]
     }
-
-    debugger
   }
 
   // button event handlers
