@@ -34,6 +34,34 @@ $(document).ready(function () {
     }
   }
 
+  // simulation functions
+  function oneTick() {
+
+  }
+  function neighborhood(rowColString) {
+    const center = rowColString.split(',').map((x) => +x)
+    const row = center[0]
+    const col = center[1]
+
+    const upRow = row > 0 ? row - 1 : maxRows - 1
+    const downRow = row < maxRows - 1 ? row + 1 : 0
+    const leftCol = col > 0 ? col - 1 : maxCols - 1
+    const rightCol = col < maxCols - 1 ? col + 1 : 0
+
+    const north = [upRow, col]
+    const south = [downRow, col]
+    const east = [row, rightCol]
+    const west = [row, leftCol]
+    const northWest = [upRow, leftCol]
+    const southWest = [downRow, leftCol]
+    const southEast = [downRow, rightCol]
+    const northEast = [upRow, rightCol]
+
+    const directions = [north, south, east, west, northWest, southWest, southEast, northEast]
+
+    return directions.map((p) => `${p[0],p[1]}`)
+  }
+
   // Cell event handler
   function uiGridCellClick(event) {
     event.preventDefault()
@@ -73,6 +101,6 @@ $(document).ready(function () {
   }
   function dumpConfigBtnClick(event) {
     event.preventDefault()
-    console.log(activeCells);
+    console.log(activeCells)
   }
 })
