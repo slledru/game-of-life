@@ -6,6 +6,11 @@ $(document).ready(function () {
   // grid data storage
   let activeCells = {}
 
+  // interval timer id
+  let intervalID = null
+
+  // interval period
+  const intervalPeriodMS = 1000
 
   // set initial UI state
   $('#stop-tick-btn').attr('disabled', true)
@@ -34,9 +39,50 @@ $(document).ready(function () {
     }
   }
 
+  function populateUIGrid() {
+    $('td').removeClass('on')
+    Object.keys(activeCells).forEach((p) => {
+      $(`td[data-row-col="${p}"]`).addClass('on')
+    })
+  }
   // simulation functions
   function oneTick() {
+    // new generation of cells
+    const nextTickActiveCells = {}
 
+    // live cells
+    for (rowColString of Object.keys(activeCells)) {
+      const n = countNeighbors(rowColString)
+      if (n === 2 || n === 3) {
+        nextTickActiveCells[rowColString] = true
+      }
+    }
+
+    // dead cells
+    for (let i = 0; i < maxRows; i++) {
+      for (let j = 0; j < maxCols; j++) {
+        const rowColString = `${i},${j}`
+        if (!(rowColString in activeCells) &&
+          countNeighbors(rowColString) === 3) {
+          nextTickActiveCells[rowColString] = true
+        }
+      }
+    }
+
+    // populate next
+    activeCells = nextTickActiveCells
+    populateUIGrid()
+  }
+  function countNeighbors(rowColString) {
+    // use reduce
+    let neighborCount = 0
+    const n = neighborhood(rowColString)
+    for (let k = 0; k < n.length; k++) {
+      if (n[k] in activeCells) {
+        neighborCount++
+      }
+    }
+    return neighborCount
   }
   function neighborhood(rowColString) {
     const center = rowColString.split(',').map((x) => +x)
@@ -59,7 +105,7 @@ $(document).ready(function () {
 
     const directions = [north, south, east, west, northWest, southWest, southEast, northEast]
 
-    return directions.map((p) => `${p[0],p[1]}`)
+    return directions.map((p) => `${p[0]},${p[1]}`)
   }
 
   // Cell event handler
@@ -82,6 +128,7 @@ $(document).ready(function () {
     $('#one-tick-btn').attr('disabled', true)
     $('#start-tick-btn').attr('disabled', true)
     $('#stop-tick-btn').attr('disabled', false)
+    intervalID = setInterval(oneTick, intervalPeriodMS)
   }
   function stopTickBtnClick(event) {
     event.preventDefault()
@@ -90,9 +137,11 @@ $(document).ready(function () {
     $('#one-tick-btn').attr('disabled', false)
     $('#start-tick-btn').attr('disabled', false)
     $('#stop-tick-btn').attr('disabled', true)
+    clearInterval(intervalID)
   }
   function oneTickBtnClick(event) {
     event.preventDefault()
+    oneTick()
   }
   function clearBtnClick(event) {
     event.preventDefault
