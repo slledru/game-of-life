@@ -1,3 +1,4 @@
 $(document).ready(function () {
-  console.log('here')
+  $('#stop-tick-btn').attr('disabled', true)
+  $('#clear-btn').attr('disabled', true)
 })
