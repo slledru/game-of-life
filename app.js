@@ -20,10 +20,20 @@ $(document).ready(function () {
       const row = $('<tr>')
       for (let j = 0; j < maxCols; j++) {
         const cell = $('<td>')
+        const rowColString = `${i},${j}`
+        cell.attr('data-row-col', rowColString)
+        cell.click(uiGridCellClick)
         row.append(cell)
       }
       $('#ui-grid').append(row)
     }
+  }
+
+  // Cell event handler
+  function uiGridCellClick(event) {
+    event.preventDefault()
+    const rowColString = $(this).attr('data-row-col')
+    console.log(`uiGridCellClick: rowColString: ${rowColString}`);
   }
 
   // button event handlers
@@ -45,14 +55,11 @@ $(document).ready(function () {
   }
   function oneTickBtnClick(event) {
     event.preventDefault()
-    console.log('oneTickBtnClick');
   }
   function clearBtnClick(event) {
     event.preventDefault()
-    console.log('clearBtnClick');
   }
   function dumpConfigBtnClick(event) {
     event.preventDefault()
-    console.log('dumpConfigBtnClick');
   }
 })
